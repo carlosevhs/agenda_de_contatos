@@ -17,6 +17,7 @@ export const Contador = styled.span`
   font-weight: bold;
   font-size: 16px;
   margin-right: 4px;
+  color: green;
 `
 
 export const Label = styled.span`
