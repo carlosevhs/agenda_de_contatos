@@ -5,6 +5,7 @@ export const Bpesquisa = styled.main`
   background-color: #eee;
   position: sticky;
   top: 0;
+  margin-bottom: 16px;
 `
 
 export const Filtros = styled.div`
