@@ -4,16 +4,15 @@ import { BsTrash3Fill, BsFillBrushFill } from 'react-icons/bs'
 import { MdDoneOutline, MdCancel } from 'react-icons/md'
 
 import * as enums from '../../utils/enums/Contato'
+import { useDispatch } from 'react-redux/es/exports'
 
-type Props = {
-  nome: string
-  relacao: enums.Relacao
-  status: enums.Status
-  numero: number
-  email: string
-}
+import { remover } from '../../store/reducers/contatos'
+import ContatoClass from '../../models/Contato'
 
-const Contato = ({ nome, relacao, status, numero, email }: Props) => {
+type Props = ContatoClass
+
+const Contato = ({ nome, relacao, status, numero, email, id }: Props) => {
+  const dispatch = useDispatch()
   const [estaEditando, setEstaEditando] = useState(false)
 
   return (
@@ -51,7 +50,7 @@ const Contato = ({ nome, relacao, status, numero, email }: Props) => {
               <BsFillBrushFill />
               <S.TextoAuxiliar>Editar</S.TextoAuxiliar>
             </S.Botao>
-            <S.BotaoCancelarExcluir>
+            <S.BotaoCancelarExcluir onClick={() => dispatch(remover(id))}>
               <BsTrash3Fill />
               <S.TextoAuxiliar>Excluir</S.TextoAuxiliar>
             </S.BotaoCancelarExcluir>
