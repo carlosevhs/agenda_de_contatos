@@ -4,7 +4,7 @@ class Contato {
   nome: string
   relacao: enums.Relacao
   status: enums.Status
-  numero: number
+  numero: string
   email: string
   id: number
 
@@ -12,7 +12,7 @@ class Contato {
     nome: string,
     relacao: enums.Relacao,
     status: enums.Status,
-    numero: number,
+    numero: string,
     email: string,
     id: number
   ) {

@@ -1,20 +1,51 @@
+import { useDispatch, useSelector } from 'react-redux'
+
 import FiltroCard from '../../components/FiltroCard'
+import { RootReducer } from '../../store'
+import { alteraTermo } from '../../store/reducers/filtro'
 
 import * as S from './styles'
+import * as enums from '../../utils/enums/Contato'
 
-const BarraDePesquisa = () => (
-  <S.Bpesquisa>
-    <S.ElementosDaBarra>
-      <S.Campo type="text" placeholder=" Buscar contato" />
-      <S.Filtros>
-        <FiltroCard legenda="Família" contador={8} />
-        <FiltroCard legenda="Amigos" contador={2} />
-        <FiltroCard legenda="Trabalho" contador={3} />
-        <FiltroCard legenda="Favoritos" contador={2} />
-        <FiltroCard ativo legenda="Todos" contador={13} />
-      </S.Filtros>
-    </S.ElementosDaBarra>
-  </S.Bpesquisa>
-)
+const BarraDePesquisa = () => {
+  const dispatch = useDispatch()
+  const { termo } = useSelector((state: RootReducer) => state.filtro)
+
+  return (
+    <S.Bpesquisa>
+      <S.ElementosDaBarra>
+        <S.Campo
+          type="text"
+          placeholder=" Buscar"
+          value={termo}
+          onChange={(evento) => dispatch(alteraTermo(evento.target.value))}
+        />
+        <S.Filtros>
+          <FiltroCard criterio="todos" legenda="Todos" />
+          <FiltroCard
+            valor={enums.Relacao.FAMILIA}
+            criterio="relacao"
+            legenda="Família"
+          />
+          <FiltroCard
+            valor={enums.Relacao.AMIGO}
+            criterio="relacao"
+            legenda="Amigos"
+          />
+          <FiltroCard
+            valor={enums.Relacao.TRABALHO}
+            criterio="relacao"
+            legenda="Trabalho"
+          />
+          <FiltroCard
+            valor={enums.Status.FAVORITO}
+            criterio="status"
+            legenda="Favoritos"
+          />
+        </S.Filtros>
+      </S.ElementosDaBarra>
+    </S.Bpesquisa>
+  )
+}
 
 export default BarraDePesquisa

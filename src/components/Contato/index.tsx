@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import * as S from './styles'
 import { BsTrash3Fill, BsFillBrushFill } from 'react-icons/bs'
 import { MdDoneOutline, MdCancel } from 'react-icons/md'
@@ -6,14 +6,38 @@ import { MdDoneOutline, MdCancel } from 'react-icons/md'
 import * as enums from '../../utils/enums/Contato'
 import { useDispatch } from 'react-redux/es/exports'
 
-import { remover } from '../../store/reducers/contatos'
+import { remover, editar } from '../../store/reducers/contatos'
 import ContatoClass from '../../models/Contato'
 
 type Props = ContatoClass
 
-const Contato = ({ nome, relacao, status, numero, email, id }: Props) => {
+const Contato = ({
+  nome,
+  relacao,
+  status,
+  numero: numeroOriginal,
+  email: emailOriginal,
+  id
+}: Props) => {
   const dispatch = useDispatch()
   const [estaEditando, setEstaEditando] = useState(false)
+  const [numero, setNumero] = useState('')
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    if (numeroOriginal.length > 0) {
+      setNumero(numeroOriginal)
+    }
+    if (emailOriginal.length > 0) {
+      setEmail(emailOriginal)
+    }
+  }, [numeroOriginal, emailOriginal])
+
+  function cancelarEdicao() {
+    setEstaEditando(false)
+    setEmail(emailOriginal)
+    setNumero(numeroOriginal)
+  }
 
   return (
     <S.Card>
@@ -29,17 +53,39 @@ const Contato = ({ nome, relacao, status, numero, email, id }: Props) => {
             </S.Tag>
           </div>
         </S.SuperiorDoCard>
-        <S.Numero value={numero} />
-        <S.Email value={email} />
+        <S.Numero
+          disabled={!estaEditando}
+          value={numero}
+          onChange={(evento) => setNumero(evento.target.value)}
+        />
+        <S.Email
+          disabled={!estaEditando}
+          value={email}
+          onChange={(evento) => setEmail(evento.target.value)}
+        />
       </S.BarraContato>
       <S.BarraAcao>
         {estaEditando ? (
           <>
-            <S.BotaoSalvar>
+            <S.BotaoSalvar
+              onClick={() => {
+                dispatch(
+                  editar({
+                    nome,
+                    relacao,
+                    status,
+                    numero,
+                    email,
+                    id
+                  })
+                )
+                setEstaEditando(false)
+              }}
+            >
               <MdDoneOutline />
               <S.TextoAuxiliar>Salvar</S.TextoAuxiliar>
             </S.BotaoSalvar>
-            <S.BotaoCancelarExcluir onClick={() => setEstaEditando(false)}>
+            <S.BotaoCancelarExcluir onClick={cancelarEdicao}>
               <MdCancel />
               <S.TextoAuxiliar>Cancelar</S.TextoAuxiliar>
             </S.BotaoCancelarExcluir>

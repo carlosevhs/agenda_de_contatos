@@ -54,6 +54,9 @@ export const Tag = styled.span<TagProps>`
   border-radius: 8px;
   margin: 0 8px;
   display: inline-block;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `
 
 export const BarraAcao = styled.div`
@@ -72,6 +75,7 @@ export const Numero = styled.input`
   margin: 4px 0;
   border: none;
   background-color: transparent;
+  width: 100%;
 `
 
 export const Email = styled.input`
@@ -83,6 +87,7 @@ export const Email = styled.input`
   margin: 4px 0;
   border: none;
   background-color: transparent;
+  width: 100%;
 `
 
 export const Botao = styled.button`
