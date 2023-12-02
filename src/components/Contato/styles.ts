@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import variaveis from '../../styles/variaveis'
 
+import { Botao } from '../../styles'
 import * as enums from '../../utils/enums/Contato'
 
 type TagProps = {
@@ -28,6 +29,10 @@ export const Card = styled.div`
   border-radius: 16px;
   display: flex;
   justify-content: space-between;
+
+  label {
+    align-items: center;
+  }
 `
 
 export const SuperiorDoCard = styled.div`
@@ -90,21 +95,6 @@ export const Email = styled.input`
   width: 100%;
 `
 
-export const Botao = styled.button`
-  font-size: 16px;
-  font-weight: bold;
-  padding: 8px 12px;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  background-color: #2f3640;
-  border-radius: 8px;
-  display: block;
-  margin: 8px 0 8px 16px;
-  &:hover div {
-    display: block;
-  }
-`
 export const TextoAuxiliar = styled.div`
   display: none;
   position: fixed;
@@ -115,10 +105,6 @@ export const TextoAuxiliar = styled.div`
   border: 1px solid #ddd;
   border-radius: 4px;
   z-index: 999;
-`
-
-export const BotaoSalvar = styled(Botao)`
-  background-color: ${variaveis.verde};
 `
 export const BotaoCancelarExcluir = styled(Botao)`
   background-color: ${variaveis.vermelho};

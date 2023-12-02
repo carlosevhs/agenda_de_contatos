@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import * as S from './styles'
 import { BsTrash3Fill, BsFillBrushFill } from 'react-icons/bs'
 import { MdDoneOutline, MdCancel } from 'react-icons/md'
 
-import * as enums from '../../utils/enums/Contato'
 import { useDispatch } from 'react-redux/es/exports'
 
-import { remover, editar } from '../../store/reducers/contatos'
+import { remover, editar, alteraStatus } from '../../store/reducers/contatos'
 import ContatoClass from '../../models/Contato'
+import { Botao, BotaoSalvar } from '../../styles'
+import * as enums from '../../utils/enums/Contato'
 
 type Props = ContatoClass
 
@@ -39,15 +40,37 @@ const Contato = ({
     setNumero(numeroOriginal)
   }
 
+  function alteraStatusContato(evento: ChangeEvent<HTMLInputElement>) {
+    console.log(evento.target.checked)
+    dispatch(
+      alteraStatus({
+        id,
+        ehFavorito: evento.target.checked
+      })
+    )
+  }
+
   return (
     <S.Card>
       <S.BarraContato>
         <S.SuperiorDoCard>
-          <S.Nome>{nome}</S.Nome>
+          <S.Nome>
+            {estaEditando && <em>Editando: </em>}
+
+            {nome}
+          </S.Nome>
           <div>
-            <S.Tag parametro="status" status={status}>
-              {status}
-            </S.Tag>
+            <label htmlFor="">
+              <input
+                checked={status === enums.Status.FAVORITO}
+                onChange={alteraStatusContato}
+                type="checkbox"
+                id={nome}
+              />
+              <S.Tag parametro="status" status={status}>
+                {status}
+              </S.Tag>
+            </label>
             <S.Tag parametro="relacao" relacao={relacao}>
               {relacao}
             </S.Tag>
@@ -67,7 +90,7 @@ const Contato = ({
       <S.BarraAcao>
         {estaEditando ? (
           <>
-            <S.BotaoSalvar
+            <BotaoSalvar
               onClick={() => {
                 dispatch(
                   editar({
@@ -84,7 +107,7 @@ const Contato = ({
             >
               <MdDoneOutline />
               <S.TextoAuxiliar>Salvar</S.TextoAuxiliar>
-            </S.BotaoSalvar>
+            </BotaoSalvar>
             <S.BotaoCancelarExcluir onClick={cancelarEdicao}>
               <MdCancel />
               <S.TextoAuxiliar>Cancelar</S.TextoAuxiliar>
@@ -92,10 +115,10 @@ const Contato = ({
           </>
         ) : (
           <>
-            <S.Botao onClick={() => setEstaEditando(true)}>
+            <Botao onClick={() => setEstaEditando(true)}>
               <BsFillBrushFill />
               <S.TextoAuxiliar>Editar</S.TextoAuxiliar>
-            </S.Botao>
+            </Botao>
             <S.BotaoCancelarExcluir onClick={() => dispatch(remover(id))}>
               <BsTrash3Fill />
               <S.TextoAuxiliar>Excluir</S.TextoAuxiliar>

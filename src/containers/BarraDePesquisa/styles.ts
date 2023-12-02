@@ -25,16 +25,3 @@ export const ElementosDaBarra = styled.div`
     display: block;
   }
 `
-export const Campo = styled.input`
-  border-radius: 8px;
-  background-color: #FFF
-  padding: 8px;
-  color: #666666;
-  font-weight: bold;
-  border-color: #666666;
-  height: 33px;
-  width: 100%;
-  @media (max-width: 768px) {
-
-  }
-`

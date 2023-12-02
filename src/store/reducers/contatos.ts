@@ -8,40 +8,7 @@ type ContatosState = {
 }
 
 const initialState: ContatosState = {
-  itens: [
-    {
-      id: 1,
-      nome: 'Maria Eduarda',
-      numero: '81981104763',
-      email: 'dudasdl12@gmail.com',
-      relacao: enums.Relacao.FAMILIA,
-      status: enums.Status.FAVORITO
-    },
-    {
-      id: 2,
-      nome: 'Ana Maria',
-      numero: '81987960542',
-      email: 'Anavhsilva@gmail.com',
-      relacao: enums.Relacao.FAMILIA,
-      status: enums.Status.FAVORITO
-    },
-    {
-      id: 3,
-      nome: 'João Lacerda',
-      numero: '81983452236',
-      email: 'joao2@gmail.com',
-      relacao: enums.Relacao.TRABALHO,
-      status: enums.Status.COMUM
-    },
-    {
-      id: 4,
-      nome: 'Matheus Dorneles',
-      numero: '81997721922',
-      email: 'mdmaia@gmail.com',
-      relacao: enums.Relacao.AMIGO,
-      status: enums.Status.COMUM
-    }
-  ]
+  itens: []
 }
 
 const contatosSlice = createSlice({
@@ -52,6 +19,7 @@ const contatosSlice = createSlice({
       state.itens = state.itens.filter(
         (contato) => contato.id !== action.payload
       )
+      alert('O contato será excluído da sua agenda')
     },
     editar: (state, action: PayloadAction<Contato>) => {
       const indexDoContato = state.itens.findIndex(
@@ -60,11 +28,41 @@ const contatosSlice = createSlice({
       if (indexDoContato >= 0) {
         state.itens[indexDoContato] = action.payload
       }
-      //      contatoParaEditar = action.payload
+    },
+    cadastrar: (state, action: PayloadAction<Omit<Contato, 'id'>>) => {
+      const contatoJaExiste = state.itens.find(
+        (contato) =>
+          contato.nome.toLowerCase() === action.payload.nome.toLowerCase()
+      )
+      if (contatoJaExiste) {
+        alert('Já existe um contato com esse nome.')
+      } else {
+        const ultimoContato = state.itens[state.itens.length - 1]
+
+        const contatoNovo = {
+          ...action.payload,
+          id: ultimoContato ? ultimoContato.id + 1 : 1
+        }
+        state.itens.push(contatoNovo)
+      }
+    },
+    alteraStatus: (
+      state,
+      action: PayloadAction<{ id: number; ehFavorito: boolean }>
+    ) => {
+      const indexDoContato = state.itens.findIndex(
+        (c) => c.id === action.payload.id
+      )
+      if (indexDoContato >= 0) {
+        state.itens[indexDoContato].status = action.payload.ehFavorito
+          ? enums.Status.FAVORITO
+          : enums.Status.COMUM
+      }
     }
   }
 })
 
-export const { remover, editar } = contatosSlice.actions
+export const { remover, editar, cadastrar, alteraStatus } =
+  contatosSlice.actions
 
 export default contatosSlice.reducer
